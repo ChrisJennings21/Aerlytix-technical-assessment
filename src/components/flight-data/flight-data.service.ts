@@ -23,7 +23,7 @@ export class FlightDataService {
     private airportRepository: Repository<Airport>,@InjectRepository(Aircraft)
     private aircraftRepository: Repository<Aircraft>) { }
 
-    async create(flightData: flightDataInterface) {
+    async create(flightData: flightDataInterface) : Promise<FlightData>{
         // transform links into database entitys 
         flightData.departure_airport = await this.airportRepository.findOne({ where: { airportCode :  flightData.departure_airport.toString()}})
         flightData.arrival_airport = await this.airportRepository.findOne({ where: { airportCode :  flightData.arrival_airport.toString()} })
@@ -68,7 +68,9 @@ export class FlightDataService {
 
         return await this.flightDataRepository.save(flightData)
     }
-    unixTimestamp () {  
+
+
+    unixTimestamp (): number {  
         return Math.floor(Date.now() / 1000)
     }
 }

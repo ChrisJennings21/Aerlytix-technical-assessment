@@ -35,7 +35,7 @@ export class FlightMetricsService {
     private portfolioRepository: Repository<Portfolio>, @InjectRepository(AircraftType)
     private aircraftTypeRepository: Repository<AircraftType>){}
 
-    async getPortfolioMetrics(portfolioName : string, last24: string){
+    async getPortfolioMetrics(portfolioName : string, last24: string): Promise<portfolioMetricsResult[]>{
         try{
             var portfolioFlightHistory =  await this.portfolioRepository.findOne({
                 where: {
@@ -54,7 +54,7 @@ export class FlightMetricsService {
         }
     }
 
-    async getOverviewMetrics(){
+    async getOverviewMetrics(): Promise<overviewMetricsResult[]>{
         try{
             // get aircraft type data with aircraft and flight data relations. this will give the data needed to generate an overview report.
             var overviewFlightHistory =  await this.aircraftTypeRepository.find({
@@ -67,7 +67,7 @@ export class FlightMetricsService {
         }
     }
 
-    transformOverviewToReport(aircraftData : AircraftType[] ){
+    transformOverviewToReport(aircraftData : AircraftType[] ): overviewMetricsResult[]{
         let report = [];
         // loop through aircraft types
         for(let aircraftTypeIndex = 0; aircraftTypeIndex < aircraftData.length; aircraftTypeIndex++){
@@ -90,7 +90,7 @@ export class FlightMetricsService {
     }
 
     // function to transform and calculate data for reports. Would generally do most of this work using sql query but for purpose of project creating an in memory solution
-    transformDataToReport(flightData: Portfolio, last24: string){
+    transformDataToReport(flightData: Portfolio, last24: string): portfolioMetricsResult[]{
         // initialise return array to be empty
         let report = [];
         let currentTimestamp = this.unixTimestamp();
@@ -107,6 +107,7 @@ export class FlightMetricsService {
                     temporyResult.total_number_of_flights += 1;
                 }
                 else{
+                    // check if the arrival time occurred within the last day
                     if(flightData.aircrafts[aircraftIndex].flightData[flightDataIndex].arrival_timestamp > (currentTimestamp - 86400)){
                         temporyResult.total_flight_hours += (flightData.aircrafts[aircraftIndex].flightData[flightDataIndex].arrival_timestamp - flightData.aircrafts[aircraftIndex].flightData[flightDataIndex].departure_timestamp);
                         temporyResult.total_number_of_flights += 1; 
@@ -117,7 +118,6 @@ export class FlightMetricsService {
         }
         return report
     }
-
     unixTimestamp () {  
         return Math.floor(Date.now() / 1000)
       }
