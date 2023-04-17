@@ -1,5 +1,5 @@
 
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AircraftType } from 'src/Entitys/aircraftType.entity';
 import { Portfolio } from 'src/Entitys/portfolio.entity';
@@ -42,6 +42,11 @@ export class FlightMetricsService {
                     portfolioName: portfolioName,
                 }, relations: ['aircrafts', "aircrafts.flightData", "aircrafts.aircraftType"]
             })
+            if(portfolioFlightHistory == undefined){
+                throw new BadRequestException(
+                    'Portfolio does not exist in our records',
+                );  
+            }
             return await this.transformDataToReport(portfolioFlightHistory, last24)
         }
         catch (err){
