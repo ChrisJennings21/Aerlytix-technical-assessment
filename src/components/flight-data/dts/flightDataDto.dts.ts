@@ -1,26 +1,35 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Aircraft } from "src/Entitys/aircraft.entity";
-import { Airport } from "src/Entitys/airport.entity";
+import { IsNotEmpty, IsNumber, IsString, } from "class-validator";
 
 
 export class FlightDataDto {
 
     @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
     public flight_number: string;
     
     @ApiProperty()
-    public registration: Aircraft;
+    @IsString()
+    @IsNotEmpty()
+    public registration: string;
     
     @ApiProperty()
-    public departure_airport: Airport;
+    @IsString()
+    @IsNotEmpty()
+    public departure_airport: string;
 
     @ApiProperty()
-    public arrival_airport: Airport;
+    @IsString()
+    @IsNotEmpty()
+    public arrival_airport: string;
 
     @ApiProperty()
+    @IsNumber()
     public departure_timestamp: number;
 
     @ApiProperty()
+    @IsNumber()
     public arrival_timestamp: number;
 
   }

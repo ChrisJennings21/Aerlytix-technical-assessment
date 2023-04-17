@@ -42,7 +42,6 @@ export class FlightMetricsService {
                     portfolioName: portfolioName,
                 }, relations: ['aircrafts', "aircrafts.flightData", "aircrafts.aircraftType"]
             })
-            console.log(portfolioFlightHistory)
             return await this.transformDataToReport(portfolioFlightHistory, last24)
         }
         catch (err){
