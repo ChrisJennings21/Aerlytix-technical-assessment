@@ -1,15 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FlightDataController } from './flight-data/flight-data.controller';
-import { FlightDataModule } from './flight-data/flight-data.module';
-import { FlightMetricsModule } from './flight-metrics/flight-metrics.module';
-import { PortfolioModule } from './portfolio/portfolio.module';
-import { aircraft } from './sharedEntitys/aircraft.entity';
-import { aircraftType } from './sharedEntitys/aircraftType.entity';
-import { airport } from './sharedEntitys/airport.entity';
-import { flightData } from './sharedEntitys/flightData.entity';
-import { portfolio } from './sharedEntitys/portfolio.entity';
-import { portfolioAircraft } from './sharedEntitys/portfolioAircraft.entity';
+import { FlightDataModule } from './components/flight-data/flight-data.module';
+import { FlightMetricsModule } from './components/flight-metrics/flight-metrics.module';
+import { PortfolioModule } from './components/portfolio-management/portfolio.module';
+import { Aircraft } from './Entitys/aircraft.entity';
+import { AircraftType } from './Entitys/aircraftType.entity';
+import { Airport } from './Entitys/airport.entity';
+import { FlightData } from './Entitys/flightData.entity';
+import { Portfolio } from './Entitys/portfolio.entity';
+import { PortfolioAircraft } from './Entitys/portfolioAircraft.entity';
 
 
 @Module({
@@ -20,10 +20,14 @@ import { portfolioAircraft } from './sharedEntitys/portfolioAircraft.entity';
     username: 'root',
     password: 'root',
     database: 'aerlytixdb',
-    entities: [aircraft,aircraftType,airport,flightData,portfolio,portfolioAircraft],
+    entities: [Aircraft,AircraftType,Airport,FlightData,Portfolio,PortfolioAircraft],
     synchronize: true,
   }),],
   controllers: [],
-  providers: [],
+  providers: [ {
+    provide: APP_PIPE,
+    useClass: ValidationPipe,
+  },],
+  
 })
 export class AppModule {}
