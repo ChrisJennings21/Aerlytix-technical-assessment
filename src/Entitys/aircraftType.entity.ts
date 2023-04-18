@@ -9,6 +9,7 @@ export class AircraftType {
     @Column()
     aircraftType: string;
 
-    @OneToMany(() => Aircraft, aircraft => aircraft.aircraftType)
+    @OneToMany(() => Aircraft, aircraft => aircraft.aircraftType, {nullable: true},
+    )
     aircrafts : Aircraft[];
 }

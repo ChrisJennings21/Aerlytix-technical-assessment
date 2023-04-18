@@ -24,7 +24,7 @@ export class PortfolioService {
     // creates a new portfolio 
     async create(portfolio: portfolioInterface) {
         try {
-            return await this.portfolioRepository.save(portfolio)
+            return await this.portfolioRepository.save(portfolio);
         }
         catch (err) {
             // if a user trys to insert the portfolio name that has allready been entered the unique constrain on the colum will trigger an error which is caught and a message returned to the sender
@@ -33,7 +33,7 @@ export class PortfolioService {
                     'A portfolio with this name allready exists',
                 );
             }
-            return err
+            return err;
         }
     }
 
@@ -49,7 +49,7 @@ export class PortfolioService {
             where: {
                 id: id,
             }, relations: ['aircrafts']
-        })
+        });
     }
 
     // function finds a portfolio by name which is a unquie string given to each portfolio. This is needed as users input the name of the portfolio and not the ID.
@@ -59,7 +59,7 @@ export class PortfolioService {
 
     async addAircraftToPortfolio(aircraftInterface: aircraftInterface) {
         // get the portfolio object from the database to post releation to portfolio
-        var selectedPortfolio = await this.portfolioRepository.findOne({ where: { id: aircraftInterface.portfolioID }, relations: ['aircrafts'] })
+        var selectedPortfolio = await this.portfolioRepository.findOne({ where: { id: aircraftInterface.portfolioID }, relations: ['aircrafts'] });
         // check if the portfolio exists
         if (selectedPortfolio == undefined) {
             throw new BadRequestException(
@@ -74,20 +74,20 @@ export class PortfolioService {
         }
         // if all these constraints have passed update the aircraft to point to the correct portfolio
         else {
-            var aircraftToUpdate = await this.AircraftRepository.findOne({ where: { registrationCode: aircraftInterface.aircraftRegistration }, relations: ['portfolio'] })
+            var aircraftToUpdate = await this.AircraftRepository.findOne({ where: { registrationCode: aircraftInterface.aircraftRegistration }, relations: ['portfolio'] });
             aircraftToUpdate.portfolio.push(selectedPortfolio);
-            return await this.AircraftRepository.save(aircraftToUpdate)
+            return await this.AircraftRepository.save(aircraftToUpdate);
         }
     }
 
     async removeAircraftToPortfolio(aircraftInterface: aircraftInterface) {
         // set the portfolio FK to null in the aircraft table
-        var aircraftToUpdate = await this.AircraftRepository.findOne({ where: { registrationCode: aircraftInterface.aircraftRegistration }, relations: ['portfolio'] })
-        aircraftToUpdate.portfolio = aircraftToUpdate.portfolio.filter(portfolio => portfolio.id != aircraftInterface.portfolioID)
-        await this.AircraftRepository.save(aircraftToUpdate)
+        var aircraftToUpdate = await this.AircraftRepository.findOne({ where: { registrationCode: aircraftInterface.aircraftRegistration }, relations: ['portfolio'] });
+        aircraftToUpdate.portfolio = aircraftToUpdate.portfolio.filter(portfolio => portfolio.id != aircraftInterface.portfolioID);
+        await this.AircraftRepository.save(aircraftToUpdate);
     }
 
     async deletePortfolio(portfolio: portfolioInterface) {
-        return await this.portfolioRepository.delete({ portfolioName: portfolio.portfolioName })
+        return await this.portfolioRepository.delete({ portfolioName: portfolio.portfolioName });
     }
 }

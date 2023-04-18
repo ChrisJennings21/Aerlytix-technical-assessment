@@ -1,8 +1,8 @@
 
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AircraftType } from 'src/Entitys/aircraftType.entity';
-import { Portfolio } from 'src/Entitys/portfolio.entity';
+import { AircraftType } from '../../Entitys/aircraftType.entity';
+import { Portfolio } from '../../Entitys/portfolio.entity';
 import { Repository } from 'typeorm';
 
 
@@ -40,21 +40,21 @@ export class FlightMetricsService {
             where: {
                 portfolioName: portfolioName,
             }, relations: ['aircrafts', "aircrafts.flightData", "aircrafts.aircraftType"]
-        })
+        });
         if (portfolioFlightHistory == undefined) {
             throw new BadRequestException(
                 'Portfolio does not exist in our records',
             );
-        }
-        return await this.transformDataToReport(portfolioFlightHistory, last24)
+        };
+        return await this.transformDataToReport(portfolioFlightHistory, last24);
     }
 
     async getOverviewMetrics(): Promise<overviewMetricsResult[]> {
         // get aircraft type data with aircraft and flight data relations. this will give the data needed to generate an overview report.
         var overviewFlightHistory = await this.aircraftTypeRepository.find({
             relations: ["aircrafts.flightData"]
-        })
-        return await this.transformOverviewToReport(overviewFlightHistory)
+        });
+        return await this.transformOverviewToReport(overviewFlightHistory);
     }
 
     transformOverviewToReport(aircraftData: AircraftType[]): overviewMetricsResult[] {
@@ -62,23 +62,23 @@ export class FlightMetricsService {
         // loop through aircraft types
         for (let aircraftTypeIndex = 0; aircraftTypeIndex < aircraftData.length; aircraftTypeIndex++) {
             let temporyResult: overviewMetricsResult = new overviewMetricsResult;
-            temporyResult.aircraft_model = aircraftData[aircraftTypeIndex].aircraftType
+            temporyResult.aircraft_model = aircraftData[aircraftTypeIndex].aircraftType;
             // loop through aircraft in each aircraft type
             for (let aircraftIndex = 0; aircraftIndex < aircraftData[aircraftTypeIndex].aircrafts.length; aircraftIndex++) {
                 // loop through each flight that aircraft had and calculate total flights and flight hours
                 for (let flightDataIndex = 0; flightDataIndex < aircraftData[aircraftTypeIndex].aircrafts[aircraftIndex].flightData.length; flightDataIndex++) {
                     // calculate the different between depature and arrival time stamps and add it to total flight hours
-                    temporyResult.total_flight_hours += (aircraftData[aircraftTypeIndex].aircrafts[aircraftIndex].flightData[flightDataIndex].arrival_timestamp - aircraftData[aircraftTypeIndex].aircrafts[aircraftIndex].flightData[flightDataIndex].departure_timestamp)
+                    temporyResult.total_flight_hours += (aircraftData[aircraftTypeIndex].aircrafts[aircraftIndex].flightData[flightDataIndex].arrival_timestamp - aircraftData[aircraftTypeIndex].aircrafts[aircraftIndex].flightData[flightDataIndex].departure_timestamp);
                     // increment as we read in each flight 
                     temporyResult.total_number_of_flights += 1;
                 }
             }
             // transform seconds to hours
-            temporyResult.total_flight_hours = temporyResult.total_flight_hours / 3600
+            temporyResult.total_flight_hours = temporyResult.total_flight_hours / 3600;
             // push each result to the final array to return to user.
-            report.push(temporyResult)
+            report.push(temporyResult);
         }
-        return report
+        return report;
     }
 
     // function to transform and calculate data for reports. Would generally do most of this work using sql query but for purpose of project creating an in memory solution
@@ -107,14 +107,14 @@ export class FlightMetricsService {
                 }
             }
             // convert from seconds to hours
-            temporyResult.total_flight_hours = temporyResult.total_flight_hours / 3600
-            report.push(temporyResult)
+            temporyResult.total_flight_hours = temporyResult.total_flight_hours / 3600;
+            report.push(temporyResult);
         }
-        return report
+        return report;
     }
 
     unixTimestamp() {
-        return Math.floor(Date.now() / 1000)
+        return Math.floor(Date.now() / 1000);
     }
 
 }

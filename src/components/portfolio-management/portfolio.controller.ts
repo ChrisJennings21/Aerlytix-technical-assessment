@@ -13,10 +13,10 @@ export class PortfolioController {
     @Post()
     createPortfolio(@Body() portfolioDto: portfolioDto) {
         try {
-            return this.portfolioService.create(portfolioDto)
+            return this.portfolioService.create(portfolioDto);
         }
         catch (err) {
-            return err
+            return err;
         }
     }
 
@@ -32,16 +32,16 @@ export class PortfolioController {
 
     @Patch("addAircraft")
     addAircraftToPortfolio(@Body() aircraftDTO: AircraftDto) {
-        return this.portfolioService.addAircraftToPortfolio(aircraftDTO)
+        return this.portfolioService.addAircraftToPortfolio(aircraftDTO);
     }
 
     @Patch("removeAircraft")
     removeAircraftFromPortfolio(@Body() aircraftDTO: AircraftDto) {
-        return this.portfolioService.removeAircraftToPortfolio(aircraftDTO)
+        return this.portfolioService.removeAircraftToPortfolio(aircraftDTO);
     }
 
     @Delete()
     deletePortfolio(@Body() portfolioDto: portfolioDto) {
-        return this.portfolioService.deletePortfolio(portfolioDto)
+        return this.portfolioService.deletePortfolio(portfolioDto);
     }
 }

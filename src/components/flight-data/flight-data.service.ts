@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Aircraft } from 'src/Entitys/aircraft.entity';
-import { Airport } from 'src/Entitys/airport.entity';
-import { FlightData } from 'src/Entitys/flightData.entity';
+import { Aircraft } from '../../Entitys/aircraft.entity';
+import { Airport } from '../../Entitys/airport.entity';
+import { FlightData } from '../../Entitys/flightData.entity';
 import { Repository } from 'typeorm';
 
 export interface flightDataInterface {
@@ -25,9 +25,9 @@ export class FlightDataService {
 
     async create(flightData: flightDataInterface) : Promise<FlightData>{
         // transform links into database entitys 
-        flightData.departure_airport = await this.airportRepository.findOne({ where: { airportCode :  flightData.departure_airport.toString()}})
-        flightData.arrival_airport = await this.airportRepository.findOne({ where: { airportCode :  flightData.arrival_airport.toString()} })
-        flightData.registration = await this.aircraftRepository.findOne({ where: { registrationCode :  flightData.registration.toString()} })
+        flightData.departure_airport = await this.airportRepository.findOne({ where: { airportCode :  flightData.departure_airport.toString()}});
+        flightData.arrival_airport = await this.airportRepository.findOne({ where: { airportCode :  flightData.arrival_airport.toString()} });
+        flightData.registration = await this.aircraftRepository.findOne({ where: { registrationCode :  flightData.registration.toString()} });
         // check of the depature airport exists in db if not return error
         if(flightData.departure_airport == undefined){
             throw new BadRequestException(
@@ -66,11 +66,11 @@ export class FlightDataService {
             ); 
         }
 
-        return await this.flightDataRepository.save(flightData)
+        return await this.flightDataRepository.save(flightData);
     }
 
 
     unixTimestamp (): number {  
-        return Math.floor(Date.now() / 1000)
+        return Math.floor(Date.now() / 1000);
     }
 }

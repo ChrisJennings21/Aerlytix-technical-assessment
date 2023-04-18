@@ -14,13 +14,18 @@ export class FlightMetricsController {
     async getPortfolioMetrics(@Query('portfolioName') portfolioName: string,
         @Query('last24') last24: boolean) {
         // parse last24 to boolean
-        last24 = Boolean(last24)
-        return await this.flightMetricsSerivce.getPortfolioMetrics(portfolioName, last24)
+        if(last24.toString() === "false"){
+            last24 = false;
+        }
+        else if(last24.toString() === "true"){
+            last24 = true;
+        }
+        return await this.flightMetricsSerivce.getPortfolioMetrics(portfolioName, last24);
     }
     
     @Get("overview")
     async getOverviewMetrics() {
-        return await this.flightMetricsSerivce.getOverviewMetrics()
+        return await this.flightMetricsSerivce.getOverviewMetrics();
 
     }
 }

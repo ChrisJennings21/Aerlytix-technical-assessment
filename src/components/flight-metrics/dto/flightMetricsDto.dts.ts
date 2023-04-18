@@ -1,7 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
-import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
-import { type } from "os";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class FlightMetricsDto {
 

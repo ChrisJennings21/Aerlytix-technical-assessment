@@ -10,7 +10,7 @@ export class FlightDataController {
     
     @Post()
     async inputFlightData(@Body() flightDataDto: FlightDataDto){
-        return await this.flightDataService.create(flightDataDto)
+        return await this.flightDataService.create(flightDataDto);
     }
 
 }
