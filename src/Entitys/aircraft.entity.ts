@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne, PrimaryColumn, JoinColumn, OneToMany, ManyToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne, PrimaryColumn, JoinColumn, OneToMany, ManyToMany, JoinTable } from "typeorm"
 import { AircraftType } from "./aircraftType.entity"
 import { FlightData } from "./flightData.entity"
 import { Portfolio } from "./portfolio.entity";
@@ -20,7 +20,8 @@ export class Aircraft {
     @OneToMany(() => FlightData, flightData => flightData.registration)
     flightData: FlightData[];
 
-    @ManyToOne(() => Portfolio, portfolio => portfolio.aircrafts)
-    portfolio: Portfolio;
+    @ManyToMany(() => Portfolio, portfolio => portfolio.aircrafts)
+    @JoinTable()
+    portfolio: Portfolio[];
 
 }

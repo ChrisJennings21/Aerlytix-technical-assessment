@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { FlightDataDto } from './dts/flightDataDto.dts';
+import { FlightDataDto } from './dto/flightDataDto.dts';
 import { FlightDataService } from './flight-data.service';
 import { ApiTags } from '@nestjs/swagger';
 

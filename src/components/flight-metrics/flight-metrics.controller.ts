@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Query } from '@nestjs/common';
 import { FlightMetricsService } from './flight-metrics.service';
-import { FlightMetricsDto } from './dts/flightMetricsDto.dts';
+import { FlightMetricsDto } from './dto/flightMetricsDto.dts';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('flight-metrics')
@@ -8,24 +8,19 @@ import { ApiTags } from '@nestjs/swagger';
 
 export class FlightMetricsController {
 
-    constructor(public flightMetricsSerivce: FlightMetricsService){}
+    constructor(public flightMetricsSerivce: FlightMetricsService) { }
 
     @Get()
-    async getPortfolioMetrics(@Body() flightMetricsDto: FlightMetricsDto){
-        try{
-            return await this.flightMetricsSerivce.getPortfolioMetrics(flightMetricsDto.portfolio_name, flightMetricsDto.last_24_hours)
-        }
-        catch(err){
-            return err
-        }
+    async getPortfolioMetrics(@Query('portfolioName') portfolioName: string,
+        @Query('last24') last24: boolean) {
+        // parse last24 to boolean
+        last24 = Boolean(last24)
+        return await this.flightMetricsSerivce.getPortfolioMetrics(portfolioName, last24)
     }
+    
     @Get("overview")
-    async getOverviewMetrics(){
-        try{
-            return await this.flightMetricsSerivce.getOverviewMetrics()
-        }
-        catch(err){
-            return err
-        }
+    async getOverviewMetrics() {
+        return await this.flightMetricsSerivce.getOverviewMetrics()
+
     }
 }

@@ -1,7 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany, JoinColumn } from "typeorm"
-import { PortfolioAircraft } from "./portfolioAircraft.entity"
+import { Entity, PrimaryGeneratedColumn, Column, Unique, JoinColumn, ManyToMany, JoinTable } from "typeorm"
 import { Aircraft } from "./aircraft.entity";
-import { ApiProperty } from "@nestjs/swagger";
 
 @Entity()
 @Unique(["portfolioName"])
@@ -9,12 +7,12 @@ export class Portfolio {
     @PrimaryGeneratedColumn()
     id: number
     
-    @ApiProperty()
     @Column()
     portfolioName: string
-    
-    @ApiProperty()
-    @OneToMany(() => Aircraft, aircraft => aircraft.portfolio)
-    @JoinColumn()
+
+    @ManyToMany(() => Aircraft, aircraft => aircraft.portfolio,  {
+        cascade: true,
+        onDelete: "CASCADE"
+      })
     aircrafts: Aircraft[];
 }

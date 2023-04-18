@@ -9,7 +9,6 @@ import { AircraftType } from './Entitys/aircraftType.entity';
 import { Airport } from './Entitys/airport.entity';
 import { FlightData } from './Entitys/flightData.entity';
 import { Portfolio } from './Entitys/portfolio.entity';
-import { PortfolioAircraft } from './Entitys/portfolioAircraft.entity';
 
 
 @Module({
@@ -19,8 +18,8 @@ import { PortfolioAircraft } from './Entitys/portfolioAircraft.entity';
     port: 3306,
     username: 'root',
     password: 'root',
-    database: 'aerlytixdb',
-    entities: [Aircraft,AircraftType,Airport,FlightData,Portfolio,PortfolioAircraft],
+    database: 'technicalassessmentdb',
+    entities: [Aircraft,AircraftType,Airport,FlightData,Portfolio],
     synchronize: true,
   }),],
   controllers: [],
